@@ -1,1 +1,5 @@
 http://tutorialtous.com/c/tokens.php
+http://www.lysator.liu.se/c/ANSI-C-grammar-l.html
+
+Arising Questions
+1) if an identifier is encountered, should it be counted again as a token?
