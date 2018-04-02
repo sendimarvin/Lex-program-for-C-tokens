@@ -21,15 +21,21 @@ int countIncrement = 0;
 int countEquivalence = 0;
 int countPlusOperator = 0;
 int countNumberOfCommentsIngnored = 0;
+int countAddAsign = 0;
+int countNotEqualOperator = 0;
+int countGreaterThanOperator = 0;
+int countMultiplyAssign     = 0;
+int countDecrement          = 0;
+int countLessThanOrEqualTo  = 0;
 %}
 whitespace	[ \n\t\r]
 preprocessor    #include<{letter}+(\.{letter}*)?>
-comment         "/*"(.|\n)*"*/"	
+comment         "/*"(.|\n)*"*/"|"//".|"/"(.[\n].)"/"
 letter		[a-zA-Z_]
 digit		[0-9]
 operator	[+-*/]
 stringLiteral {letter}?\"(\\.|[^\\"])*\"
-Keyword     if|else|while|int|switch|for|char|return|break|double
+Keyword     if|else|while|int|switch|for|char|return|break|double|do|long
 openningParenthesis [(]
 closingParenthesis [)]
 openningCurlyBracket [{]
@@ -43,7 +49,13 @@ equalsOperator  [=]
 lessThan        [<]
 plusOperator    [+]
 increment       "++"
+decrement       "--"
 equivalence     "=="
+addAssign       "+="
+notEqualOperator   "!="
+greaterThanOperator [>]
+multiplyAssign      "*="
+lessThanOrEqualTo   "<="
 
 %%
 {whitespace}+	{/*skip white space*/}
@@ -51,7 +63,7 @@ equivalence     "=="
 {comment}       {countNumberOfCommentsIngnored++;}
 {Keyword} {countKeywords++; /*printf("Keyword: %s \n", yytext);*/}
 {letter}({letter}|{digit})* {countIdentifiers++; /*printf("Identifiers: %s \n", yytext);*/}
-{digit}*	{countNumericals++;}
+{digit}*|{digit}*"."{digit}*	{countNumericals++;}
 {openningParenthesis} {countOpenningParenthesis++;}
 {closingParenthesis} {countClosingParenthesis++;}
 {openningCurlyBracket} {countOpenningCurlyBrackets++;}
@@ -67,13 +79,18 @@ equivalence     "=="
 {increment} {countIncrement++;}
 {equivalence} {countEquivalence++;}
 {plusOperator} {countPlusOperator++;}
-
+{addAssign} {countAddAsign++;}
+{notEqualOperator} {countNotEqualOperator++;}
+{greaterThanOperator} {countGreaterThanOperator++;}
+{multiplyAssign} {countMultiplyAssign++;}
+{decrement} {countDecrement++;}
+{lessThanOrEqualTo} {countLessThanOrEqualTo++;}
 .	{printf("invalid: %s \n", yytext);}
 
 
 %%
 int main(int argc[], char *argv[]){
-yyin = fopen("abc.c", "r");
+yyin = fopen("Project.c", "r");
 yylex();
 printf("\n************************************************************\n");
 printf("\t PREPROCESSORS: \t %d \n", countPreprocessors);
@@ -83,7 +100,8 @@ totalIdentifiers = countKeywords +  countIdentifiers + countNumericals + countOp
     + countClosingParenthesis + countOpenningCurlyBrackets +countClosingCurlyBrackets
     + countOpenningSquareBracket + countClosingSquareBracket + countDelimiter + countTermination
     + countStringLiteral +countAnd + countEqualOperator + countlessThan + countIncrement + countEquivalence
-    + countPlusOperator;
+    + countPlusOperator + countAddAsign + countNotEqualOperator + countMultiplyAssign + countGreaterThanOperator
+    + countDecrement + countLessThanOrEqualTo;
 printf("\n************************************************************\n");
 printf("\tTOTAL TOKENS FOUND: %d \n", totalIdentifiers);
 printf("\t TOKEN CLASS \t NO. OF TOKENS FOUND \n");
@@ -105,5 +123,11 @@ printf("\t lessThan: \t %d \n", countlessThan);
 printf("\t increment: \t %d \n", countIncrement);
 printf("\t equivalence: \t %d \n", countEquivalence);
 printf("\t plusOperator: \t %d \n", countPlusOperator);
+printf("\t addAssign: \t %d \n", countAddAsign);
+printf("\t notEqualOperator: \t %d \n", countNotEqualOperator);
+printf("\t multiplyAssign: \t %d \n", countMultiplyAssign);
+printf("\t greaterThanOperator: \t %d \n", countGreaterThanOperator);
+printf("\t decrement: \t %d \n", countDecrement);
+printf("\t lessThanOrEqualTo: \t %d \n", countLessThanOrEqualTo);
 return 0;
 }
