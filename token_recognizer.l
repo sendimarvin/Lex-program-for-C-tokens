@@ -5,18 +5,44 @@ int countKeywords=0;
 int countIdentifiers=0;
 int countNumericals=0;
 int countPreprocessors = 0;
+int countOpenningParenthesis = 0;
+int countClosingParenthesis = 0;
+int countOpenningCurlyBrackets = 0;
+int countClosingCurlyBrackets = 0;
+int countOpenningSquareBracket = 0;
+int countClosingSquareBracket = 0;
+int countDelimiter = 0;
+int countTermination = 0;
 %}
 whitespace	[ \n\t\r]
+preprocessor    #include<{letter}+(\.{letter}*)?>
 letter		[a-zA-Z_]
 digit		[0-9]
 operator	[+-*/]
+Keyword     if|else|while|int|switch|for|char|return
+openningParenthesis [(]
+closingParenthesis [)]
+openningCurlyBracket [{]
+closingCurlyBracket    [}]
+openningSquareBracket   [[]
+closingSquareBracket    []]
+delimiter    [,]
+termination [;]
 
 %%
 {whitespace}+	{/*skip white space*/}
-#include<{letter}+(\.{letter}*)?> {countPreprocessors++; printf("\tPREPROCESSOR: %s\n",yytext);}
-if|else|while|int|switch|for|char {countKeywords++; /*printf("Keyword: %s, count: %d", yytext, countKeywords );*/}
-{letter}({letter}|{digit})* {countIdentifiers++;}
+{preprocessor} {countPreprocessors++; /*printf("\tPREPROCESSOR: %s\n",yytext);*/}
+{Keyword} {countKeywords++; /*printf("Keyword: %s \n", yytext);*/}
+{letter}({letter}|{digit})* {countIdentifiers++; /*printf("Identifiers: %s \n", yytext);*/}
 {digit}*	{countNumericals++;}
+{openningParenthesis} {countOpenningParenthesis++;}
+{closingParenthesis} {countClosingParenthesis++;}
+{openningCurlyBracket} {countOpenningCurlyBrackets++;}
+{closingCurlyBracket} {countClosingCurlyBrackets++;}
+{openningSquareBracket} {countOpenningSquareBracket++;}
+{closingSquareBracket} {countClosingSquareBracket++;}
+{delimiter} {countDelimiter++;}
+{termination} {countTermination++;}
 .	{printf("invalid: %s \n", yytext);}
 
 
@@ -27,12 +53,22 @@ yylex();
 printf("\n************************************************************\n");
 printf("\t PREPROCESSORS: \t %d \n", countPreprocessors);
 int totalIdentifiers = 0;
-totalIdentifiers = countKeywords +  countIdentifiers + countNumericals;
+totalIdentifiers = countKeywords +  countIdentifiers + countNumericals + countOpenningParenthesis 
+    + countClosingParenthesis + countOpenningCurlyBrackets +countClosingCurlyBrackets
+    + countOpenningSquareBracket + countClosingSquareBracket + countDelimiter + countTermination;
 printf("\n************************************************************\n");
 printf("\tTOTAL TOKENS FOUND: %d \n", totalIdentifiers);
 printf("\t TOKEN CLASS \t NO. OF TOKENS FOUND \n");
 printf("\t Keywords: \t %d \n", countKeywords);
 printf("\t Identifiers: \t %d \n", countIdentifiers);
 printf("\t Numerials: \t %d \n", countNumericals);
+printf("\t openningParenthesis: \t %d \n", countOpenningParenthesis);
+printf("\t closingParenthesis: \t %d \n", countClosingParenthesis);
+printf("\t openningCurlyBracket: \t %d \n", countOpenningCurlyBrackets);
+printf("\t closingCurlyBracket: \t %d \n", countClosingCurlyBrackets);
+printf("\t openningSquareBracket: \t %d \n", countOpenningSquareBracket);
+printf("\t closingSquareBracket: \t %d \n", countClosingSquareBracket);
+printf("\t delimiter: \t %d \n", countDelimiter);
+printf("\t termination: \t %d \n", countTermination);
 return 0;
 }
