@@ -27,10 +27,12 @@ int countGreaterThanOperator = 0;
 int countMultiplyAssign     = 0;
 int countDecrement          = 0;
 int countLessThanOrEqualTo  = 0;
+
+static void multiLineComment(void);
 %}
 whitespace	[ \n\t\r]
 preprocessor    #include<{letter}+(\.{letter}*)?>
-comment         "/*"(.|\n)*"*/"|"//".|"/"(.[\n].)"/"
+comment         "//".*
 letter		[a-zA-Z_]
 digit		[0-9]
 operator	[+-*/]
@@ -60,6 +62,7 @@ lessThanOrEqualTo   "<="
 %%
 {whitespace}+	{/*skip white space*/}
 {preprocessor} {countPreprocessors++; /*printf("\tPREPROCESSOR: %s\n",yytext);*/}
+"/*"            { multiLineComment(); countNumberOfCommentsIngnored++;}
 {comment}       {countNumberOfCommentsIngnored++;}
 {Keyword} {countKeywords++; /*printf("Keyword: %s \n", yytext);*/}
 {letter}({letter}|{digit})* {countIdentifiers++; /*printf("Identifiers: %s \n", yytext);*/}
@@ -96,7 +99,7 @@ printf("\n************************************************************\n");
 printf("\t PREPROCESSORS: \t %d \n", countPreprocessors);
 printf("\t Number of comments: \t %d ", countNumberOfCommentsIngnored);
 int totalIdentifiers = 0;
-totalIdentifiers = countKeywords +  countIdentifiers + countNumericals + countOpenningParenthesis 
+totalIdentifiers = countKeywords +  countIdentifiers + countNumericals + countOpenningParenthesis
     + countClosingParenthesis + countOpenningCurlyBrackets +countClosingCurlyBrackets
     + countOpenningSquareBracket + countClosingSquareBracket + countDelimiter + countTermination
     + countStringLiteral +countAnd + countEqualOperator + countlessThan + countIncrement + countEquivalence
@@ -128,6 +131,25 @@ printf("\t notEqualOperator: \t %d \n", countNotEqualOperator);
 printf("\t multiplyAssign: \t %d \n", countMultiplyAssign);
 printf("\t greaterThanOperator: \t %d \n", countGreaterThanOperator);
 printf("\t decrement: \t %d \n", countDecrement);
-printf("\t lessThanOrEqualTo: \t %d \n", countLessThanOrEqualTo);
+printf("\t lessThanOrEqualTo: \t %d \n", countLessThanOrEqualTo  );
 return 0;
+}
+
+static void multiLineComment(void) {
+    int c;
+
+    while ((c = input()) != 0) {
+        // printf("%c\n", (char)c);
+        if (c == '*') {
+            while ((c = input()) == '*')
+                ;
+
+            if (c == '/')
+                return;
+
+            if (c == 0)
+                break;
+        }
+    }
+
 }
