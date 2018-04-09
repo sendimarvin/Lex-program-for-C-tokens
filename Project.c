@@ -37,7 +37,7 @@ int main()
     if (c == n)
         printf("%d isn't present in the array.\n", search);
     
-    double number, sum = 0;
+    int number, sum = 0;
 
     // loop body is executed at least once
     do
@@ -49,9 +49,8 @@ int main()
     while(number != 0.0);
 
     printf("Sum = %.2lf",sum);
-    
-    int number;
-    long long factorial;
+
+    long factorial;
 
     printf("Enter an integer: ");
     scanf("%d",&number);
@@ -66,7 +65,8 @@ int main()
     }
 
     printf("Factorial= %lld", factorial);
-    int num, count, sum = 0;
+    int num, count; 
+    sum = 0;
 
     printf("Enter a positive integer: ");
     scanf("%d", &num);

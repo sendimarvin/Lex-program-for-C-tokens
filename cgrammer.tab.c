@@ -89,7 +89,10 @@ void yyerror (char const *s) {
 # define YYERROR_VERBOSE 0
 #endif
 
-
+/* In a future release of Bison, this section will be replaced
+   by #include "cgrammer.tab.h".  */
+#ifndef YY_YY_CGRAMMER_TAB_H_INCLUDED
+# define YY_YY_CGRAMMER_TAB_H_INCLUDED
 /* Enabling traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -204,12 +207,12 @@ int yyparse ();
 #endif
 #endif /* ! YYPARSE_PARAM */
 
-
+#endif /* !YY_YY_CGRAMMER_TAB_H_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
 
 /* Line 390 of yacc.c  */
-#line 213 "cgrammer.tab.c"
+#line 216 "cgrammer.tab.c"
 
 #ifdef short
 # undef short
@@ -2292,7 +2295,7 @@ yyreduce:
     {
       
 /* Line 1792 of yacc.c  */
-#line 2296 "cgrammer.tab.c"
+#line 2299 "cgrammer.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
